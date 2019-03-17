@@ -1,0 +1,21 @@
+Camera Video Streaming through Kafka and Spark Stream
+
+
+The whole task is implemented on Linux platform
+Before running the code make sure to start zookeeper(local) and then the kafka broker server(local)
+
+
+
+then start the kafka producer (kproducer) with topic jbm.
+
+Collect the images that get stored in the destination path with face recognised using AdaBoost (pre-trained) model.
+
+END to END:
+WebCam Video face detection using AdaBoost model and streaming that video through kafka where spark stream collects and saves the face detected images to the desired location
+
+Here first we setup the whole producer side confguration(buffer size,aknowledges, Message type, retries, batch size , zookeeper servers etc.) for kafka brokers
+Then we take snaps and detect faces using pre-trained AdaBoost(Decision tree based supervised boosting algorithm) model(done in openCV).
+Serlialize it to json using google's gson lib and sending the json string over kafka (topic:jbm) 
+Create a consumer which subscribers to jbm topic and deserialize json string to SnapStream object which gets collected in Spark's(local i.e single node) DataSet
+get it partitioned for the required block size (user_input) (Stream.java or Stream2.java)
+Iterate through DataSet and get the Mat function from SnapStream object and save those at required location.
